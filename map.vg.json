@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": "Australian LGAs: Population by Year (choropleth) + Ambulance Stations",
+  "title": "Australian LGAs: Population by Year and Ambulance Stations",
   "width": 1000,
   "height": 560,
 

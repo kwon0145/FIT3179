@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ambulance Stations & Population Distribution in Australia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Vega / Vega-Lite / Embed -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+  <header class="site-header">
+    <h1>Ambulance Stations & Population Distribution in Australia</h1>
+    <p class="subtitle">Population pattern and ambulance access across Australia (2001-2024)</p>
+  </header>
+
+  <main class="container">
+    <!-- Map card -->
+    <section class="card">
+      <div class="card-head">
+        <h2>Interactive Map of Ambulance Station and Population (2001-2024)</h2>
+        <p class="card-note">This map overlaps access and demand. The choropleth shades each LGA by its population for the selected year. Together, it lets you compare where people live and where help is located</p>
+      </div>
+      <div id="vis-map" class="chart"></div>
+    </section>
+
+    <!-- Age composition line -->
+    <section class="card">
+      <div class="card-head">
+        <h2>Age Composition(%) by State</h2>
+        <p class="card-note">The line chart compares each state's age distribution for selected year. The peak age band lies on 30-34 and 60-64</p>
+      </div>
+      <div id="vis-age-line" class="chart"></div>
+    </section>
+
+    <!-- By-state bar -->
+    <section class="card">
+      <div class="card-head">
+        <h2>Population and Ambulance Station Count by State</h2>
+        <p class="card-note">This chart shows how well the ambulance station is distributed amongst highly populated states.</p>
+      </div>
+      <div id="vis-state-bar" class="chart"></div>
+    </section>
+  </main>
+
+  <script>
+    // ---- Embed helpers
+    async function safeEmbed(target, specUrl) {
+      try {
+        const res = await vegaEmbed(target, specUrl, {
+          actions: false,
+          renderer: "canvas",
+          // makes Vega-Lite treat "width":"container" properly when available
+          // (your map spec already uses explicit width/height, so it's fine either way)
+          config: { autosize: { type: "fit", contains: "padding" } }
+        });
+        return res.view;
+      } catch (err) {
+        console.error(`Failed to embed ${specUrl}:`, err);
+        const el = document.querySelector(target);
+        if (el) el.innerHTML = `<div class="error">Failed to load: ${specUrl}</div>`;
+        return null;
+      }
+    }
+
+    (async function init() {
+      // Update these paths if your files are elsewhere
+      const MAP_SPEC   = "https://raw.githubusercontent.com/kwon0145/FIT3179/refs/heads/main/map.vg.json";
+      const AGE_SPEC   = "https://raw.githubusercontent.com/kwon0145/FIT3179/refs/heads/main/line.vg.json";
+      const BAR_SPEC   = "https://raw.githubusercontent.com/kwon0145/FIT3179/refs/heads/main/bar.vg.json";
+
+      await Promise.all([
+        safeEmbed("#vis-map", MAP_SPEC),
+        safeEmbed("#vis-age-line", AGE_SPEC),
+        safeEmbed("#vis-state-bar", BAR_SPEC)
+      ]);
+    })();
+  </script>
+</body>
+</html>
