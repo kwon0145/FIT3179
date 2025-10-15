@@ -1,0 +1,78 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Age composition by state as a line chart for a selected year (share within state).",
+  "width": 860,
+  "height": 420,
+  "params": [
+    {
+      "name": "yr",
+      "value": 2024,
+      "bind": { "input": "range", "min": 2001, "max": 2024, "step": 1, "name": "Year: " }
+    }
+  ],
+  "data": {
+    "url": "https://raw.githubusercontent.com/kwon0145/FIT3179/refs/heads/main/population%20age.csv"
+  },
+  "transform": [
+    { "filter": "toNumber(datum.Year) == yr" },
+    {
+      "fold": [
+        "0–4","0-4",
+        "5–9","5-9",
+        "10–14","10-14",
+        "15–19","15-19",
+        "20–24","20-24",
+        "25–29","25-29",
+        "30–34","30-34",
+        "35–39","35-39",
+        "40–44","40-44",
+        "45–49","45-49",
+        "50–54","50-54",
+        "55–59","55-59",
+        "60–64","60-64",
+        "65–69","65-69",
+        "70–74","70-74",
+        "75–79","75-79",
+        "80–84","80-84",
+        "85 and over"
+      ],
+      "as": ["age_raw","pop_str"]
+    },
+    { "filter": "isValid(datum['S/T name']) && isValid(datum.pop_str)" },
+    { "calculate": "toNumber(replace(datum.pop_str, /,/g, ''))", "as": "pop" },
+    { "calculate": "datum.age_raw === '85 and over' ? '85 and over' : replace(datum.age_raw, '-', '–')", "as": "age_band" },
+    { "aggregate": [{ "op": "sum", "field": "pop", "as": "pop_sa" }], "groupby": ["S/T name","age_band"] },
+    { "joinaggregate": [{ "op": "sum", "field": "pop_sa", "as": "state_total" }], "groupby": ["S/T name"] },
+    { "calculate": "datum.pop_sa / datum.state_total", "as": "share" }
+  ],
+  "mark": { "type": "line", "point": true },
+  "encoding": {
+    "x": {
+      "field": "age_band",
+      "type": "ordinal",
+      "title": "Age band",
+      "sort": [
+        "0–4","5–9","10–14","15–19","20–24","25–29","30–34","35–39",
+        "40–44","45–49","50–54","55–59","60–64","65–69","70–74","75–79","80–84","85 and over"
+      ],
+      "axis": { "labelAngle": 0 }
+    },
+    "y": {
+      "field": "share",
+      "type": "quantitative",
+      "title": "Population share",
+      "axis": { "format": "%" }
+    },
+    "color": {
+      "field": "S/T name",
+      "type": "nominal",
+      "title": "State/Territory"
+    },
+    "tooltip": [
+      { "field": "S/T name", "title": "State/Territory" },
+      { "field": "age_band", "title": "Age band" },
+      { "field": "share", "title": "Share", "format": ".1%" }
+    ]
+  },
+  "config": { "view": { "stroke": null }, "axis": { "labelFontSize": 12, "titleFontSize": 12 } }
+}

@@ -1,0 +1,133 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Australian LGAs: Population by Year (choropleth) + Ambulance Stations",
+  "width": 1000,
+  "height": 560,
+
+  "params": [
+    {
+      "name": "Year_selection",
+      "value": 2024,
+      "bind": { "input": "range", "min": 2001, "max": 2024, "step": 1, "name": "Year: " }
+    },
+    {
+      "name": "zoom_level",
+      "value": 1200,
+      "bind": { "input": "range", "min": 400, "max": 6000, "step": 50, "name": "Zoom: " }
+    },
+    {
+      "name": "center_to",
+      "value": [134, -26],
+      "bind": {
+        "input": "select",
+        "options": [[134, -26], [151.2, -33.86], [144.96, -37.81], [153.03, -27.47], [115.86, -31.95]],
+        "labels": ["Australia (wide)", "Sydney", "Melbourne", "Brisbane", "Perth"],
+        "name": "Map Centre: "
+      }
+    },
+    {
+      "name": "viewMode",
+      "value": "All",
+      "bind": { "input": "select", "options": ["All", "Population", "Ambulance Station"], "name": "Show: " }
+    }
+  ],
+
+  "projection": {
+    "type": "mercator",
+    "center": {"expr": "center_to"},
+    "scale": {"expr": "zoom_level"}
+  },
+
+  "layer": [
+    {
+      "name": "lga_outline",
+      "data": {
+        "url": "https://raw.githubusercontent.com/kwon0145/FIT3179/refs/heads/main/LGA_2025_AUST_GDA2020.topojson",
+        "format": { "type": "topojson", "feature": "LGA_2025_AUST_GDA2020" }
+      },
+      "mark": { "type": "geoshape", "fill": "#fbfbfb", "stroke": "#d0d0d0", "strokeWidth": 0.7 }
+    },
+
+    {
+      "name": "lga_population",
+      "data": {
+        "url": "https://raw.githubusercontent.com/kwon0145/FIT3179/refs/heads/main/LGA_2025_AUST_GDA2020.topojson",
+        "format": { "type": "topojson", "feature": "LGA_2025_AUST_GDA2020" }
+      },
+      "transform": [
+        { "calculate": "toString(datum.properties.LGA_CODE25)", "as": "lga_code" },
+        { "calculate": "datum.properties.LGA_NAME25", "as": "lga_name" },
+        {
+          "lookup": "lga_code",
+          "from": {
+            "data": { "url": "https://raw.githubusercontent.com/kwon0145/FIT3179/refs/heads/main/population.csv" },
+            "key": "LGA code",
+            "fields": [
+              "2001","2002","2003","2004","2005","2006","2007","2008","2009","2010",
+              "2011","2012","2013","2014","2015","2016","2017","2018","2019","2020",
+              "2021","2022","2023","2024"
+            ]
+          }
+        },
+        { "calculate": "toString(Year_selection)", "as": "year_key" },
+        { "calculate": "toNumber(replace(datum[datum.year_key], /,/g, ''))", "as": "pop_num" }
+      ],
+      "mark": { "type": "geoshape" },
+      "encoding": {
+        "opacity": {
+          "condition": { "test": "viewMode == 'All' || viewMode == 'Population'", "value": 1 },
+          "value": 0
+        },
+        "color": {
+          "field": "pop_num",
+          "type": "quantitative",
+          "title": "Population",
+          "scale": {
+            "type": "threshold",
+            "domain": [1000, 5000, 10000, 20000, 50000, 100000, 200000],
+            "range": ["#f7fbff","#deebf7","#c6dbef","#9ecae1","#6baed6","#4292c6","#2171b5","#084594"]
+          },
+          "legend": { "orient": "right" }
+        },
+        "stroke": { "value": "#f0f0f0" },
+        "tooltip": [
+          { "field": "lga_name", "title": "LGA" },
+          { "field": "pop_num", "title": "Population", "format": "," }
+        ]
+      }
+    },
+
+    {
+      "name": "stations_points",
+      "data": { "url": "https://raw.githubusercontent.com/kwon0145/FIT3179/refs/heads/main/Ambulance_Stations.csv" },
+      "transform": [
+        { "filter": "viewMode == 'All' || viewMode == 'Ambulance Station'" },
+        { "calculate": "toNumber(datum.facility_long)", "as": "lon" },
+        { "calculate": "toNumber(datum.facility_lat)", "as": "lat" },
+        { "filter": "isValid(datum.lon) && isValid(datum.lat)" },
+        { "filter": "(datum.lat <= -10) && (datum.lat >= -44) && (datum.lon >= 112) && (datum.lon <= 154)" }
+      ],
+      "mark": { "type": "circle", "size": 28, "opacity": 0.85, "stroke": "white", "strokeWidth": 0.3 },
+      "encoding": {
+        "longitude": { "field": "lon" },
+        "latitude": { "field": "lat" },
+        "color": {
+          "field": "facility_state",
+          "type": "nominal",
+          "title": "State/Territory",
+          "legend": { "orient": "bottom", "columns": 4 }
+        },
+        "tooltip": [
+          { "field": "facility_name", "title": "Station" },
+          { "field": "gnaf_formatted_address", "title": "Address" },
+          { "field": "facility_state", "title": "State" }
+        ]
+      }
+    }
+  ],
+
+  "config": {
+    "view": { "stroke": null },
+    "axis": { "labelFontSize": 12, "titleFontSize": 12 }
+  }
+}

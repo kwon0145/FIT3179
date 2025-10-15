@@ -1,0 +1,85 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Bar chart by state: total 2024 population or number of ambulance stations.",
+  "width": 860,
+  "height": 420,
+
+  "params": [
+    {
+      "name": "viewMode",
+      "value": "Population",
+      "bind": { "input": "select", "options": ["Population", "Ambulance Stations"], "name": "Show: " }
+    }
+  ],
+
+  "layer": [
+    {
+      "name": "population_by_state",
+      "data": { "url": "https://raw.githubusercontent.com/kwon0145/FIT3179/refs/heads/main/population.csv" },
+      "transform": [
+        { "calculate": "toNumber(replace(datum['2024'], /,/g, ''))", "as": "pop_num" },
+        {
+          "lookup": "LGA code",
+          "from": {
+            "data": {
+              "url": "https://raw.githubusercontent.com/kwon0145/FIT3179/refs/heads/main/LGA_2025_AUST_GDA2020.topojson",
+              "format": { "type": "topojson", "feature": "LGA_2025_AUST_GDA2020" }
+            },
+            "key": "properties.LGA_CODE25",
+            "fields": ["properties.STE_NAME21"]
+          },
+          "as": ["state_name"]
+        },
+        { "filter": "isValid(datum.state_name) && isValid(datum.pop_num)" },
+        { "aggregate": [{ "op": "sum", "field": "pop_num", "as": "total_pop" }], "groupby": ["state_name"] },
+        { "filter": "viewMode == 'Population'" }
+      ],
+      "mark": { "type": "bar" },
+      "encoding": {
+        "x": {
+          "field": "state_name",
+          "type": "nominal",
+          "title": "State/Territory",
+          "sort": ["New South Wales","Victoria","Queensland","South Australia","Western Australia","Tasmania","Northern Territory","Australian Capital Territory","Other Territories"]
+        },
+        "y": { "field": "total_pop", "type": "quantitative", "title": "Population (2024)", "axis": { "format": "~s" } },
+        "color": { "field": "state_name", "type": "nominal", "title": "State" },
+        "tooltip": [
+          { "field": "state_name", "title": "State/Territory" },
+          { "field": "total_pop", "title": "Population (2024)", "format": "," }
+        ]
+      }
+    },
+
+    {
+      "name": "stations_by_state",
+      "data": { "url": "https://raw.githubusercontent.com/kwon0145/FIT3179/refs/heads/main/Ambulance_Stations.csv" },
+      "transform": [
+        {
+          "calculate": "datum.facility_state=='NSW' ? 'New South Wales' : datum.facility_state=='VIC' ? 'Victoria' : datum.facility_state=='QLD' ? 'Queensland' : datum.facility_state=='SA' ? 'South Australia' : datum.facility_state=='WA' ? 'Western Australia' : datum.facility_state=='TAS' ? 'Tasmania' : datum.facility_state=='NT' ? 'Northern Territory' : datum.facility_state=='ACT' ? 'Australian Capital Territory' : datum.facility_state",
+          "as": "state_name"
+        },
+        { "filter": "isValid(datum.state_name)" },
+        { "aggregate": [{ "op": "count", "as": "stations" }], "groupby": ["state_name"] },
+        { "filter": "viewMode == 'Ambulance Stations'" }
+      ],
+      "mark": { "type": "bar" },
+      "encoding": {
+        "x": {
+          "field": "state_name",
+          "type": "nominal",
+          "title": "State/Territory",
+          "sort": ["New South Wales","Victoria","Queensland","South Australia","Western Australia","Tasmania","Northern Territory","Australian Capital Territory"]
+        },
+        "y": { "field": "stations", "type": "quantitative", "title": "Ambulance stations" },
+        "color": { "field": "state_name", "type": "nominal", "title": "State" },
+        "tooltip": [
+          { "field": "state_name", "title": "State/Territory" },
+          { "field": "stations", "title": "Ambulance stations" }
+        ]
+      }
+    }
+  ],
+
+  "config": { "view": { "stroke": null }, "axis": { "labelFontSize": 12, "titleFontSize": 12 } }
+}
