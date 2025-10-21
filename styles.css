@@ -1,36 +1,40 @@
 :root{
-  --bg: #0b0c10;
+  --bg: #c9a371;
   --card: #111216;
-  --muted: #8b93a1;
-  --text: #e9ecf1;
+  --muted: #404142;
+  --text: rgb(0, 0, 0);
   --accent: #5aa6ff;
-  --border: #1a1c22;
+  --border: #353535;
 }
 
-*{ box-sizing: border-box; }
-html, body{ height: 100%; }
+.didact-gothic-regular {
+  font-family: "Didact Gothic", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 body{
   margin: 0;
-  background: radial-gradient(1200px 800px at 10% -10%, #10121a 0%, #0b0c10 40%, #0b0c10 100%);
+  background: radial-gradient(1200px 800px at 10% -10%, #888888 0%, #b1b1b1 40%, #ffffff 100%);
   color: var(--text);
-  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
-  line-height: 1.45;
+  font-family: "Didact Gothic", sans-serif;
+  line-height: 1.5;
 }
 
 .site-header{
-  max-width: 1100px;
-  margin: 28px auto 10px;
-  padding: 0 16px;
+  text-align: center;
+  margin: 30px auto 10px; 
+  font-size: 40px;
 }
 .site-header h1{
   margin: 0 0 6px;
-  font-size: clamp(22px, 3.2vw, 32px);
+  font-size: 30px;
   letter-spacing: 0.2px;
 }
 .subtitle{
   margin: 0;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: 15px;
 }
 
 .container{
@@ -42,24 +46,17 @@ body{
   gap: 20px;
 }
 
-@media (min-width: 1100px){
-  .container{
-    grid-template-columns: 1fr;
-  }
-}
 
 .card{
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  background: #ffffff;
   border: 1px solid var(--border);
   border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
-  padding: 16px 16px 10px;
+  box-shadow: 0 8px 24px #000000;
+  padding: 20px 20px 10px;
 }
 
 .card-head{
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  align-items: center;
   gap: 16px;
   margin-bottom: 8px;
 }

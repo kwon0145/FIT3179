@@ -12,8 +12,8 @@
     },
     {
       "name": "zoom_level",
-      "value": 1200,
-      "bind": { "input": "range", "min": 400, "max": 6000, "step": 50, "name": "Zoom: " }
+      "value": 1000,
+      "bind": { "input": "range", "min": 400, "max": 10000, "step": 50, "name": "Zoom: " }
     },
     {
       "name": "center_to",

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ambulance Stations & Population Distribution in Australia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Didact+Gothic&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 
   <!-- Vega / Vega-Lite / Embed -->
@@ -24,7 +25,12 @@
     <section class="card">
       <div class="card-head">
         <h2>Interactive Map of Ambulance Station and Population (2001-2024)</h2>
-        <p class="card-note">This map overlaps access and demand. The choropleth shades each LGA by its population for the selected year. Together, it lets you compare where people live and where help is located</p>
+        <p class="card-note">This interactive map combines Australia's population distribution and the location of ambulance stations to reveal how
+          emergency service accessibility aligns with population density across different regions. In teh eastern and western coastal areas, where population density is higher, 
+          ambulance stations are more concentrated to ensure prompt emergency response. In contrast, the vast interior regions with lower population densities have fewer ambulance 
+          stations, highlighting the challenges of providing emergency services in remote areas. The map emphasises the importance of strategic placement of ambulance stations to 
+          effectively serve Australia's diverse population distribution by enabling users to explore different years and observe changes over time.
+        </p>
       </div>
       <div id="vis-map" class="chart"></div>
     </section>
@@ -33,7 +39,11 @@
     <section class="card">
       <div class="card-head">
         <h2>Age Composition(%) by State</h2>
-        <p class="card-note">The line chart compares each state's age distribution for selected year. The peak age band lies on 30-34 and 60-64</p>
+        <p class="card-note">The line chart compares each state's age distribution for selected year. Each line represents a specific age group percentage
+          of the population within that state, revealing demographic trends and variations across different regions. Notice how state like Tasmania and South 
+          Australia have higher proportions of older age groups (45+) compared to states like Northern Territory and ACT, which have a larger share 
+          of younger populations (&lt;45). This information is crucial for ambulance service planning, as different age groups may have varying healthcare needs and emergency response requirements.
+        </p>
       </div>
       <div id="vis-age-line" class="chart"></div>
     </section>
@@ -42,11 +52,22 @@
     <section class="card">
       <div class="card-head">
         <h2>Population and Ambulance Station Count by State</h2>
-        <p class="card-note">This chart shows how well the ambulance station is distributed amongst highly populated states.</p>
+        <p class="card-note">The barchart compares each Australia state's total population with its numeber of ambulance stations in 2024, 
+          visualising the relationship between population size and emergency service infrastructure. States with larger populations, such as New South Wales and Victoria,
+          tend to have more ambulance stations to meet the higher demand for emergency services. Conversely, less populous states like Tasmania and the Northern Territory
+          have fewer ambulance stations. This comparison highlights the importance of aligning ambulance station distribution with population density to ensure effective emergency response across Australia.
+        </p>
       </div>
       <div id="vis-state-bar" class="chart"></div>
     </section>
   </main>
+
+  <footer class="site-footer">
+    <p>FIT3179 Data Visualisation - Assignment 2  Kent Sebastian Wongsodirdjo (Student ID: 33685169)</p>
+    <p>Data Source:</p>
+    <p>Australian Bureau of Statistics (ABS): https://www.abs.gov.au/statistics/people/population/regional-population-age-and-sex/2024</p>
+    <p>Digital Atlas Australia: https://digital.atlas.gov.au/datasets/ambulance-stations/about</p>
+  </footer>
 
   <script>
     // ---- Embed helpers
@@ -69,7 +90,6 @@
     }
 
     (async function init() {
-      // Update these paths if your files are elsewhere
       const MAP_SPEC   = "https://raw.githubusercontent.com/kwon0145/FIT3179/refs/heads/main/map.vg.json";
       const AGE_SPEC   = "https://raw.githubusercontent.com/kwon0145/FIT3179/refs/heads/main/line.vg.json";
       const BAR_SPEC   = "https://raw.githubusercontent.com/kwon0145/FIT3179/refs/heads/main/bar.vg.json";

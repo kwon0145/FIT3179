@@ -3,6 +3,7 @@
   "description": "Bar chart by state: total 2024 population or number of ambulance stations.",
   "width": 860,
   "height": 420,
+  "background": "transparent",
 
   "params": [
     {
@@ -36,13 +37,13 @@
       ],
       "mark": { "type": "bar" },
       "encoding": {
-        "x": {
+        "y": {
           "field": "state_name",
           "type": "nominal",
           "title": "State/Territory",
           "sort": ["New South Wales","Victoria","Queensland","South Australia","Western Australia","Tasmania","Northern Territory","Australian Capital Territory","Other Territories"]
         },
-        "y": { "field": "total_pop", "type": "quantitative", "title": "Population (2024)", "axis": { "format": "~s" } },
+        "x": { "field": "total_pop", "type": "quantitative", "title": "Population (2024)", "axis": { "format": "~s" } },
         "color": { "field": "state_name", "type": "nominal", "title": "State" },
         "tooltip": [
           { "field": "state_name", "title": "State/Territory" },
@@ -65,13 +66,13 @@
       ],
       "mark": { "type": "bar" },
       "encoding": {
-        "x": {
+        "y": {
           "field": "state_name",
           "type": "nominal",
           "title": "State/Territory",
           "sort": ["New South Wales","Victoria","Queensland","South Australia","Western Australia","Tasmania","Northern Territory","Australian Capital Territory"]
         },
-        "y": { "field": "stations", "type": "quantitative", "title": "Ambulance stations" },
+        "x": { "field": "stations", "type": "quantitative", "title": "Ambulance stations" },
         "color": { "field": "state_name", "type": "nominal", "title": "State" },
         "tooltip": [
           { "field": "state_name", "title": "State/Territory" },

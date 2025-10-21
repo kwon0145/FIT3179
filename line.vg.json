@@ -8,6 +8,10 @@
       "name": "yr",
       "value": 2024,
       "bind": { "input": "range", "min": 2001, "max": 2024, "step": 1, "name": "Year: " }
+    },
+    {
+      "name": "hover",
+      "select": { "type": "point", "fields": ["S/T name"], "on": "mouseover", "clear": "mouseout" }
     }
   ],
   "data": {
@@ -67,6 +71,14 @@
       "field": "S/T name",
       "type": "nominal",
       "title": "State/Territory"
+    },
+    "opacity": {
+      "condition": { "param": "hover", "value": 1 },
+      "value": 0.15
+    },
+    "strokeWidth": {
+      "condition": { "param": "hover", "value": 2.5 },
+      "value": 1.2
     },
     "tooltip": [
       { "field": "S/T name", "title": "State/Territory" },
