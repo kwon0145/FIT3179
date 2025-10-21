@@ -9,7 +9,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Didact+Gothic&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 
-  <!-- Vega / Vega-Lite / Embed -->
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
@@ -21,7 +20,6 @@
   </header>
 
   <main class="container">
-    <!-- Map card -->
     <section class="card">
       <div class="card-head">
         <h2>Interactive Map of Ambulance Station and Population (2001-2024)</h2>
@@ -35,7 +33,6 @@
       <div id="vis-map" class="chart"></div>
     </section>
 
-    <!-- Age composition line -->
     <section class="card">
       <div class="card-head">
         <h2>Age Composition(%) by State</h2>
@@ -48,7 +45,6 @@
       <div id="vis-age-line" class="chart"></div>
     </section>
 
-    <!-- By-state bar -->
     <section class="card">
       <div class="card-head">
         <h2>Population and Ambulance Station Count by State</h2>
@@ -70,14 +66,11 @@
   </footer>
 
   <script>
-    // ---- Embed helpers
     async function safeEmbed(target, specUrl) {
       try {
         const res = await vegaEmbed(target, specUrl, {
           actions: false,
           renderer: "canvas",
-          // makes Vega-Lite treat "width":"container" properly when available
-          // (your map spec already uses explicit width/height, so it's fine either way)
           config: { autosize: { type: "fit", contains: "padding" } }
         });
         return res.view;
