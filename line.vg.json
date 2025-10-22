@@ -82,7 +82,7 @@
     },
     "tooltip": [
       { "field": "S/T name", "title": "State/Territory" },
-      { "field": "age_band", "title": "Age band" },
+      { "field": "age_band", "title": "Age Group" },
       { "field": "share", "title": "Share", "format": ".1%" }
     ]
   },

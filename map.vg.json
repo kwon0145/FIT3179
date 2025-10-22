@@ -13,7 +13,7 @@
     {
       "name": "zoom_level",
       "value": 700,
-      "bind": { "input": "range", "min": 400, "max": 6000, "step": 50, "name": "Zoom: " }
+      "bind": { "input": "range", "min": 400, "max": 10000, "step": 50, "name": "Zoom: " }
     },
     {
       "name": "center_to",
@@ -21,7 +21,7 @@
       "bind": {
         "input": "select",
         "options": [[134, -26], [151.2, -33.86], [144.96, -37.81], [153.03, -27.47], [115.86, -31.95]],
-        "labels": ["Australia", "Sydney", "Melbourne", "Brisbane", "Perth"],
+        "labels": ["Australia (wide)", "Sydney", "Melbourne", "Brisbane", "Perth"],
         "name": "Map Centre: "
       }
     },
@@ -103,9 +103,7 @@
       "transform": [
         { "filter": "viewMode == 'All' || viewMode == 'Ambulance Station'" },
         { "calculate": "toNumber(datum.facility_long)", "as": "lon" },
-        { "calculate": "toNumber(datum.facility_lat)", "as": "lat" },
-        { "filter": "isValid(datum.lon) && isValid(datum.lat)" },
-        { "filter": "(datum.lat <= -10) && (datum.lat >= -44) && (datum.lon >= 112) && (datum.lon <= 154)" }
+        { "calculate": "toNumber(datum.facility_lat)", "as": "lat" }
       ],
       "mark": { "type": "circle", "size": 28, "opacity": 0.85, "stroke": "white", "strokeWidth": 0.3 },
       "encoding": {
@@ -124,10 +122,5 @@
         ]
       }
     }
-  ],
-
-  "config": {
-    "view": { "stroke": null },
-    "axis": { "labelFontSize": 12, "titleFontSize": 12 }
-  }
+  ]
 }

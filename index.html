@@ -24,7 +24,7 @@
       <div class="card-head">
         <h2>Interactive Map of Ambulance Station and Population (2001-2024)</h2>
         <p class="card-note">This interactive map combines Australia's population distribution and the location of ambulance stations to reveal how
-          emergency service accessibility aligns with population density across different regions. In teh eastern and western coastal areas, where population density is higher, 
+          emergency service accessibility aligns with population density across different regions. In the eastern and western coastal areas, where population density is higher, 
           ambulance stations are more concentrated to ensure prompt emergency response. In contrast, the vast interior regions with lower population densities have fewer ambulance 
           stations, highlighting the challenges of providing emergency services in remote areas. The map emphasises the importance of strategic placement of ambulance stations to 
           effectively serve Australia's diverse population distribution by enabling users to explore different years and observe changes over time.
@@ -48,7 +48,7 @@
     <section class="card">
       <div class="card-head">
         <h2>Population and Ambulance Station Count by State</h2>
-        <p class="card-note">The barchart compares each Australia state's total population with its numeber of ambulance stations in 2024, 
+        <p class="card-note">The bar chart compares each Australia state's total population with its numeber of ambulance stations in 2024, 
           visualising the relationship between population size and emergency service infrastructure. States with larger populations, such as New South Wales and Victoria,
           tend to have more ambulance stations to meet the higher demand for emergency services. Conversely, less populous states like Tasmania and the Northern Territory
           have fewer ambulance stations. This comparison highlights the importance of aligning ambulance station distribution with population density to ensure effective emergency response across Australia.
@@ -65,34 +65,18 @@
     <p>Digital Atlas Australia: https://digital.atlas.gov.au/datasets/ambulance-stations/about</p>
   </footer>
 
-  <script>
-    async function safeEmbed(target, specUrl) {
-      try {
-        const res = await vegaEmbed(target, specUrl, {
-          actions: false,
-          renderer: "canvas",
-          config: { autosize: { type: "fit", contains: "padding" } }
-        });
-        return res.view;
-      } catch (err) {
-        console.error(`Failed to embed ${specUrl}:`, err);
-        const el = document.querySelector(target);
-        if (el) el.innerHTML = `<div class="error">Failed to load: ${specUrl}</div>`;
-        return null;
-      }
-    }
+<body>
+  <div id="vis-map"></div>
+  <div id="vis-age-line"></div>
+  <div id="vis-state-bar"></div>
 
-    (async function init() {
-      const MAP_SPEC   = "https://raw.githubusercontent.com/kwon0145/FIT3179/refs/heads/main/map.vg.json";
-      const AGE_SPEC   = "https://raw.githubusercontent.com/kwon0145/FIT3179/refs/heads/main/line.vg.json";
-      const BAR_SPEC   = "https://raw.githubusercontent.com/kwon0145/FIT3179/refs/heads/main/bar.vg.json";
+  <script type="text/javascript">
+    var MAP_SPEC = "https://raw.githubusercontent.com/kwon0145/FIT3179/refs/heads/main/map.vg.json";
+    var AGE_SPEC = "https://raw.githubusercontent.com/kwon0145/FIT3179/refs/heads/main/line.vg.json";
+    var BAR_SPEC = "https://raw.githubusercontent.com/kwon0145/FIT3179/refs/heads/main/bar.vg.json";
 
-      await Promise.all([
-        safeEmbed("#vis-map", MAP_SPEC),
-        safeEmbed("#vis-age-line", AGE_SPEC),
-        safeEmbed("#vis-state-bar", BAR_SPEC)
-      ]);
-    })();
+    vegaEmbed('#vis-map', MAP_SPEC, { actions: false }).catch(console.error);
+    vegaEmbed('#vis-age-line', AGE_SPEC, { actions: false }).catch(console.error);
+    vegaEmbed('#vis-state-bar', BAR_SPEC, { actions: false }).catch(console.error);
   </script>
-</body>
 </html>
